@@ -9,6 +9,11 @@ for file in os.listdir():
         if os.path.isfile(file):
             files.append(file)
 
+#Stats of files to be decrypted...
+num_of_files = len(files)
+status_func = (1/num_of_files)*100
+status = 0.0
+
 #The KEY...
 with open("theKey.key", "r") as the_key:
     key = the_key.read()
@@ -20,5 +25,11 @@ for file in files:
         decrypted_content = Fernet(key).decrypt(content)
         with open(file, "wb") as theFile:
             theFile.write(decrypted_content)
+            status+=status_func
+            status = round(status, 1)
+            if status <= 100:
+                print(str(status)+ "% " + "done..")
+            else:
+                print("100% " + "done..")
 
 print("Files at the location " + os.getcwd() + " are decrypted..!")

